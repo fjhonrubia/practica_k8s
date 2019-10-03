@@ -1,0 +1,8 @@
+flask
+redis
+mysql-connector-python
+
+eval $(minikube docker-env)
+
+
+

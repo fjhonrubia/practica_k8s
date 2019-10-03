@@ -1,0 +1,15 @@
+FROM python:3.7-alpine
+WORKDIR /code
+ENV FLASK_APP app.py
+ENV FLASK_RUN_HOST 0.0.0.0
+ENV REDIS_HOST redis
+ENV REDIS_PASSWORD ""
+ENV MYSQL_HOST mysql-counter
+ENV MYSQL_USER root
+ENV MYSQL_PASSWORD password
+RUN apk add --no-cache gcc musl-dev linux-headers
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["flask", "run"]
+
