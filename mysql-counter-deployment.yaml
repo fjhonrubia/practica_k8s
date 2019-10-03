@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-counter
+  labels:
+    app: flask-counter
+spec:
+  selector:
+    matchLabels:
+      app: flask-counter
+      tier: mysql-counter
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: flask-counter
+        tier: mysql-counter
+    spec:
+      containers:
+      - image: mysql
+        name: mysql-counter
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password
+              key: password
+        ports:
+        - containerPort: 3306
+          name: mysql-counter
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+
